@@ -1,5 +1,5 @@
 name: 'Deploy to Play Store'
-description: 'Deploy an Android build to Google Play'
+description: 'Downloads a previously assembled AAB artifact and publishes it to Google Play Console via Gradle'
 inputs:
   id:
     description: 'Value used to identify the workflow run'
@@ -7,27 +7,27 @@ inputs:
     default: ${{ github.run_number }}
 
   build-type:
-    description: "Build type"
+    description: 'Build variant to publish (e.g. Debug, Release, Staging)'
     required: false
     default: "Debug"
 
   gradle-args:
-    description: 'Extra Gradle arguments'
+    description: 'Extra Gradle arguments appended to the publishBundle task'
     required: false
     default: '--configuration-cache --stacktrace'
 
   artifact-type:
-    description: "Artifact type"
+    description: 'Artifact type of the build to download before publishing (APK or AAB)'
     required: false
     default: "APK"
 
   signing-files:
-    description: 'Base64 encoded string of the file'
+    description: 'Base64-encoded tar.gz containing keystore and signing config files (required for Release builds)'
     required: false
     default: ""
 
   service-credentials:
-    description: 'Google Application Credentials'
+    description: 'Base64-encoded Google service account JSON used to authenticate with the Play Developer API'
     required: true
 
 runs:

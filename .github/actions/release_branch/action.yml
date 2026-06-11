@@ -1,5 +1,5 @@
 name: 'Create release branch'
-description: "Create release branch"
+description: 'Creates a new release branch from the current HEAD using the module version, commits an empty release commit and pushes it to origin'
 
 inputs:
   id:
@@ -7,14 +7,14 @@ inputs:
     required: false
     default: ${{ github.run_number }}
   module:
-    description: 'Module name'
+    description: 'Gradle module whose version is used to name the release branch (e.g. app, :libraries:core)'
     required: false
     default: "app"
   git-user-name:
-    description: 'Github User name'
+    description: 'Git commit author name'
     required: true
   git-user-email:
-    description: 'Github User email'
+    description: 'Git commit author email'
     required: true
 
 runs:

@@ -8,22 +8,22 @@ inputs:
     default: ${{ github.run_number }}
 
   build-type:
-    description: "Build type"
+    description: 'Build variant to deploy (e.g. Debug, Release, Staging)'
     required: false
     default: "Debug"
 
   gradle-args:
-    description: 'Extra Gradle arguments'
+    description: 'Extra Gradle arguments appended to the appDistributionUpload task'
     required: false
     default: '--configuration-cache --stacktrace'
 
   artifact-type:
-    description: "Artifact type"
+    description: 'Artifact type of the build to download before deploying (APK or AAB)'
     required: false
     default: "APK"
 
   service-credentials:
-    description: 'Firebase Credentials'
+    description: 'Base64-encoded Firebase service account JSON used to authenticate with App Distribution'
     required: true
 
 runs:
