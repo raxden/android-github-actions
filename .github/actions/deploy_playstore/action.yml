@@ -37,7 +37,6 @@ runs:
       uses: actions/download-artifact@v8
       with:
         name: build-${{ inputs.artifact-type }}-${{ inputs.build-type }}-${{ inputs.id }}
-        path: app/build/outputs/
 
     - name: Decode secret files
       if: ${{ inputs.build-type == 'Release' && inputs.signing-files != '' }}
