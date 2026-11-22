@@ -63,16 +63,26 @@ runs:
     - name: Resolve artifact type
       id: artifact_type
       shell: bash
+      env:
+        INPUT_ARTIFACT_TYPE: ${{ inputs.artifact-type }}
+        BUILD_TYPE: ${{ inputs.build-type }}
       run: |
         set -euo pipefail
 
-        artifact="${{ inputs.artifact-type }}"
+        artifact="$INPUT_ARTIFACT_TYPE"
 
         if [[ -z "$artifact" ]]; then
-          bundleTask="bundle${{ inputs.build-type }}"
+          bundleTask="bundle${BUILD_TYPE}"
           echo "Auto-detecting artifact-type via task: ${bundleTask}"
 
-          if ./gradlew tasks --all --console=plain | grep -Eq "^[[:space:]]*${bundleTask}[[:space:]]"; then
+          # Cheaper than `tasks --all`: `help --task` only resolves the task name.
+          # Gradle accepts camelCase/prefix abbreviations, so a library's
+          # bundle<BuildType>Aar would also resolve; only an exact
+          # `[:<project>]:bundle<BuildType>` path line counts as an application.
+          # Output format: a "Path" heading followed by indented path lines.
+          # stdout is captured as-is (no -q); stderr is discarded.
+          helpOutput="$(./gradlew help --task "${bundleTask}" --console=plain 2>/dev/null || true)"
+          if grep -Eq "^[[:space:]]*(:[^[:space:]]+)?:${bundleTask}[[:space:]]*$" <<< "$helpOutput"; then
             artifact="AAB"   # application
           else
             artifact="AAR"   # library
